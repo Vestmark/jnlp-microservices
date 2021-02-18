@@ -96,10 +96,3 @@ ENV PATH=$sonarBinFolder:$PATH
 WORKDIR /repository
 
 RUN volta install node
-
-# await execute(`
-# 	/kaniko/executor --context ${context} \
-# 		--dockerfile ${context}/Dockerfile \
-# 		--destination ${packageName}:${tag} \
-# 		--force
-# `)
