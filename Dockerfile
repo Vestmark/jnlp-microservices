@@ -75,7 +75,24 @@ RUN curl https://get.volta.sh | bash
 ENV VOLTA_HOME=/home/jenkins/.volta
 ENV PATH=$PATH:$VOLTA_HOME/bin
 
-# WORKDIR /kaniko
+# Set Up SonarQube
+ARG sonarRepository=http://nexus.hq.viviport.com:8081/nexus/repository/github/SonarSource/sonar-scanner-cli/releases/download/
+ARG sonarHome=/home/jenkins/.sonar
+ARG sonarVersion=4.4.0.2170
+ARG sonarInstaller=sonar-scanner-cli-$sonarVersion.zip
+ARG sonarBinFolder=$sonarHome/bin
+ARG sonarExtractedFolder=$sonarHome/sonar-scanner-$sonarVersion
+
+RUN rm -rf $sonarHome && \
+	mkdir -p $sonarBinFolder && \
+	wget -O $sonarHome/$sonarInstaller -q $sonarRepository/$sonarVersion/$sonarInstaller && \
+	unzip $sonarHome/$sonarInstaller -d $sonarHome && \
+	mv $sonarExtractedFolder/* $sonarHome && \
+	rm -rf $sonarHome/$sonarInstaller $sonarExtractedFolder && \
+	chmod +x $sonarBinFolder/*
+
+ENV PATH=$sonarBinFolder:$PATH
+
 WORKDIR /repository
 
 RUN volta install node
