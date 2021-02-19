@@ -76,7 +76,7 @@ ENV VOLTA_HOME=/home/jenkins/.volta
 ENV PATH=$PATH:$VOLTA_HOME/bin
 
 # Set Up SonarQube
-ARG sonarRepository=http://nexus.hq.viviport.com:8081/nexus/repository/github/SonarSource/sonar-scanner-cli/releases/download/
+ARG sonarRepository=https://github.com/SonarSource/sonar-scanner-cli/releases/download
 ARG sonarHome=/home/jenkins/.sonar
 ARG sonarVersion=4.4.0.2170
 ARG sonarInstaller=sonar-scanner-cli-$sonarVersion.zip
