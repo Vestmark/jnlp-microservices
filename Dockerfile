@@ -3,9 +3,6 @@ FROM jenkins/inbound-agent
 
 USER root
 
-COPY --from=kaniko /kaniko /kaniko
-ENV PATH=$PATH:/kaniko
-
 RUN apt-get update && apt-get install -y \
 	amazon-ecr-credential-helper \
 	build-essential \
@@ -58,6 +55,9 @@ RUN curl -SL "${TERRAFORM_URL}" --output terraform.zip \
 RUN curl -sL "${TERRAGRUNT_URL}" -o /bin/terragrunt \
   && echo "${TERRAGRUNT_CHECKSUM} /bin/terragrunt" | sha256sum -c - \
   && chmod +x /bin/terragrunt
+
+COPY --chown=jenkins:root --from=kaniko /kaniko /kaniko
+ENV PATH=$PATH:/kaniko
 
 USER jenkins
 
