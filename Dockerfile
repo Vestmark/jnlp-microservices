@@ -56,10 +56,9 @@ RUN curl -sL "${TERRAGRUNT_URL}" -o /bin/terragrunt \
   && echo "${TERRAGRUNT_CHECKSUM} /bin/terragrunt" | sha256sum -c - \
   && chmod +x /bin/terragrunt
 
-COPY --chown=jenkins:root --from=kaniko /kaniko /kaniko
+COPY --from=kaniko /kaniko /kaniko
 ENV PATH=$PATH:/kaniko
-
-USER jenkins
+ENV DOCKER_CONFIG=/kaniko/.docker
 
 RUN pip3 install --user virtualenv
 ENV PATH=$PATH:/home/jenkins/.local/bin
