@@ -81,6 +81,7 @@ ARG sonarVersion=4.4.0.2170
 ARG sonarInstaller=sonar-scanner-cli-$sonarVersion.zip
 ARG sonarBinFolder=$sonarHome/bin
 ARG sonarExtractedFolder=$sonarHome/sonar-scanner-$sonarVersion
+ENV PATH=$sonarBinFolder:$PATH
 
 RUN rm -rf $sonarHome && \
 	mkdir -p $sonarBinFolder && \
@@ -89,8 +90,6 @@ RUN rm -rf $sonarHome && \
 	mv $sonarExtractedFolder/* $sonarHome && \
 	rm -rf $sonarHome/$sonarInstaller $sonarExtractedFolder && \
 	chmod +x $sonarBinFolder/*
-
-ENV PATH=$sonarBinFolder:$PATH
 
 WORKDIR /repository
 
