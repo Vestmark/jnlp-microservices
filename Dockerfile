@@ -3,7 +3,7 @@ FROM jenkins/inbound-agent
 
 USER root
 
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
 	amazon-ecr-credential-helper \
 	build-essential \
 	libasound2 \
@@ -57,10 +57,10 @@ RUN curl -sL "${TERRAGRUNT_URL}" -o /bin/terragrunt \
   && chmod +x /bin/terragrunt
 
 COPY --from=kaniko /kaniko /kaniko
-ENV PATH=$PATH:/kaniko
 ENV DOCKER_CONFIG=/kaniko/.docker
+ENV PATH=$PATH:/kaniko
 
-RUN pip3 install --user virtualenv
+RUN pip3 install virtualenv
 ENV PATH=$PATH:/home/jenkins/.local/bin
 
 # Install EB CLI
@@ -70,8 +70,8 @@ RUN git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git \
 ENV PATH=$PATH:/home/jenkins/.ebcli-virtual-env/executables
 
 # Install Volta (to manage Node versions)
-RUN curl https://get.volta.sh | bash
 ENV VOLTA_HOME=/home/jenkins/.volta
+RUN curl https://get.volta.sh | bash
 ENV PATH=$PATH:$VOLTA_HOME/bin
 
 # Set Up SonarQube
