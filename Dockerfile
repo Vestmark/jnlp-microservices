@@ -1,4 +1,4 @@
-FROM gcr.io/kaniko-project/executor:v1.5.2 as kaniko
+FROM gcr.io/kaniko-project/executor:v1.6.0 as kaniko
 FROM jenkins/inbound-agent
 
 USER root
@@ -56,9 +56,9 @@ RUN curl -sL "${TERRAGRUNT_URL}" -o /bin/terragrunt \
   && echo "${TERRAGRUNT_CHECKSUM} /bin/terragrunt" | sha256sum -c - \
   && chmod +x /bin/terragrunt
 
-COPY --from=kaniko /kaniko /kaniko
-ENV DOCKER_CONFIG=/kaniko/.docker
-ENV PATH=$PATH:/kaniko
+COPY --from=kaniko /kaniko /kaniko-tools
+ENV DOCKER_CONFIG=/kaniko-tools/.docker
+ENV PATH=$PATH:/kaniko-tools
 
 RUN pip3 install virtualenv
 ENV PATH=$PATH:/home/jenkins/.local/bin
@@ -75,9 +75,9 @@ RUN curl https://get.volta.sh | bash
 ENV PATH=$PATH:$VOLTA_HOME/bin
 
 # Set Up SonarQube
-ARG sonarRepository=https://github.com/SonarSource/sonar-scanner-cli/releases/download
+ARG sonarRepository=https://binaries.sonarsource.com/Distribution/sonar-scanner-cli
 ARG sonarHome=/home/jenkins/.sonar
-ARG sonarVersion=4.4.0.2170
+ARG sonarVersion=4.6.1.2450
 ARG sonarInstaller=sonar-scanner-cli-$sonarVersion.zip
 ARG sonarBinFolder=$sonarHome/bin
 ARG sonarExtractedFolder=$sonarHome/sonar-scanner-$sonarVersion
@@ -85,7 +85,7 @@ ENV PATH=$sonarBinFolder:$PATH
 
 RUN rm -rf $sonarHome && \
 	mkdir -p $sonarBinFolder && \
-	wget -O $sonarHome/$sonarInstaller -q $sonarRepository/$sonarVersion/$sonarInstaller && \
+	wget -O $sonarHome/$sonarInstaller -q $sonarRepository/$sonarInstaller && \
 	unzip $sonarHome/$sonarInstaller -d $sonarHome && \
 	mv $sonarExtractedFolder/* $sonarHome && \
 	rm -rf $sonarHome/$sonarInstaller $sonarExtractedFolder && \
