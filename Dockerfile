@@ -1,4 +1,4 @@
-FROM gcr.io/kaniko-project/executor:v1.5.2 as kaniko
+FROM gcr.io/kaniko-project/executor:v1.6.0 as kaniko
 FROM jenkins/inbound-agent
 
 USER root
@@ -56,9 +56,9 @@ RUN curl -sL "${TERRAGRUNT_URL}" -o /bin/terragrunt \
   && echo "${TERRAGRUNT_CHECKSUM} /bin/terragrunt" | sha256sum -c - \
   && chmod +x /bin/terragrunt
 
-COPY --from=kaniko /kaniko /kaniko
-ENV DOCKER_CONFIG=/kaniko/.docker
-ENV PATH=$PATH:/kaniko
+COPY --from=kaniko /kaniko /kaniko-tools
+ENV DOCKER_CONFIG=/kaniko-tools/.docker
+ENV PATH=$PATH:/kaniko-tools
 
 RUN pip3 install virtualenv
 ENV PATH=$PATH:/home/jenkins/.local/bin
