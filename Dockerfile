@@ -75,9 +75,9 @@ RUN curl https://get.volta.sh | bash
 ENV PATH=$PATH:$VOLTA_HOME/bin
 
 # Set Up SonarQube
-ARG sonarRepository=https://github.com/SonarSource/sonar-scanner-cli/releases/download
+ARG sonarRepository=https://binaries.sonarsource.com/Distribution/sonar-scanner-cli
 ARG sonarHome=/home/jenkins/.sonar
-ARG sonarVersion=4.4.0.2170
+ARG sonarVersion=4.6.1.2450
 ARG sonarInstaller=sonar-scanner-cli-$sonarVersion.zip
 ARG sonarBinFolder=$sonarHome/bin
 ARG sonarExtractedFolder=$sonarHome/sonar-scanner-$sonarVersion
@@ -85,7 +85,7 @@ ENV PATH=$sonarBinFolder:$PATH
 
 RUN rm -rf $sonarHome && \
 	mkdir -p $sonarBinFolder && \
-	wget -O $sonarHome/$sonarInstaller -q $sonarRepository/$sonarVersion/$sonarInstaller && \
+	wget -O $sonarHome/$sonarInstaller -q $sonarRepository/$sonarInstaller && \
 	unzip $sonarHome/$sonarInstaller -d $sonarHome && \
 	mv $sonarExtractedFolder/* $sonarHome && \
 	rm -rf $sonarHome/$sonarInstaller $sonarExtractedFolder && \
