@@ -4,6 +4,7 @@ FROM jenkins/inbound-agent
 USER root
 
 RUN apt update && apt install -y \
+	curl \
 	amazon-ecr-credential-helper \
 	build-essential \
 	libasound2 \
