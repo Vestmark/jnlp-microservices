@@ -4,6 +4,7 @@ FROM jenkins/inbound-agent
 USER root
 
 RUN apt update && apt install -y \
+	python \
 	curl \
 	amazon-ecr-credential-helper \
 	build-essential \
