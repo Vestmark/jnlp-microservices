@@ -1,5 +1,5 @@
 FROM gcr.io/kaniko-project/executor:v1.6.0 as kaniko
-FROM jenkins/inbound-agent
+FROM jenkins/inbound-agent:4.9-1
 
 USER root
 
