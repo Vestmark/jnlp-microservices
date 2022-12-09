@@ -1,9 +1,13 @@
 FROM gcr.io/kaniko-project/executor:v1.6.0 as kaniko
-FROM jenkins/inbound-agent
+FROM jenkins/inbound-agent:4.9-1
 
 USER root
 
 RUN apt update && apt install -y \
+	wget \
+	tar \
+	python \
+	curl \
 	amazon-ecr-credential-helper \
 	build-essential \
 	libasound2 \
@@ -90,6 +94,18 @@ RUN rm -rf $sonarHome && \
 	mv $sonarExtractedFolder/* $sonarHome && \
 	rm -rf $sonarHome/$sonarInstaller $sonarExtractedFolder && \
 	chmod +x $sonarBinFolder/*
+	
+WORKDIR /opt/java
+
+RUN mkdir -p /usr/lib/jvm
+
+RUN wget https://github.com/AdoptOpenJDK/openjdk11-upstream-binaries/releases/download/jdk-11.0.16%2B8/OpenJDK11U-jdk_x64_linux_11.0.16_8.tar.gz
+
+RUN tar -xzf OpenJDK11U-jdk_x64_linux_11.0.16_8.tar.gz
+
+RUN ln -s /opt/java/openjdk-11.0.16_8 /usr/lib/jvm/openjdk-11.0.16_8
+
+RUN rm -f OpenJDK11U-jdk_x64_linux_11.0.16_8.tar.gz	
 
 WORKDIR /repository
 
